@@ -169,3 +169,14 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Vim temporary files
+*.swp
+*.swo
+
+# Data files
+*.dcm
+*.ply
+*.h5
+*.json
+*.csv
