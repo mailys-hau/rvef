@@ -25,8 +25,10 @@ filterwarnings("ignore", message="A builtin ctypes object gave a PEP3118 format 
 
 
 
-def get_frames(src, hdf, bbox, max_vshape):
+def get_frames(src, hdf, bbox, max_vshape, fname):
     nbf = src.GetFrameCount() # Number of frames
+    if fname.parent.stem == "104001":
+        nbf = 19 # Patch because that file isn't fully annotated
     try:
         # API returns unsigned int
         lut = np.array(src.GetColorMap(), dtype=np.uint).astype(np.uint8)
@@ -82,4 +84,4 @@ def dcm2vox(fname, hdf, vres):
     group.create_dataset("directions", data=directions)
     group.create_dataset("resolution", data=vres)
     group.create_dataset("colorMap", data=src.GetColorMap())
-    get_frames(src, hdf, bbox, max_vshape)
+    get_frames(src, hdf, bbox, max_vshape, fname)
