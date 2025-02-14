@@ -1,0 +1,10 @@
+click
+comtypes
+h5py
+numpy
+pandas
+pillow
+rich
+scipy
+trimesh
+pyyaml
