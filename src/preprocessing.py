@@ -15,8 +15,9 @@ from utils.progress import NestedProgress
 
 
 def _get_dcm_name(mpath, dcm): #FIXME: Dunno if this is correct
+    mname = next(mpath.glob("*.ply")).stem.split('_')[0]
     for dname in dcm.iterdir():
-        if dname.stem != mpath.stem.split('_')[0]:
+        if dname.stem != mname:
             return dname # If it has the same name as mesh, then it's EchoPAC annotation
 
 def file2vox(dcm, plydir, voldir, infodir, vres, opath, progress, tid):
@@ -26,7 +27,7 @@ def file2vox(dcm, plydir, voldir, infodir, vres, opath, progress, tid):
         return
     mpath = plydir.joinpath(dcm.name)
     # There's several dicom associated to the patient, we make sure to get the correct one
-    dname = _get_dcm_name(mpath, dcm) #dcm.joinpath(next(mpath.glob("*.ply")).stem.split('_')[0])
+    dname = _get_dcm_name(mpath, dcm)
     hdf = h5py.File(opath.joinpath(mpath.name).with_suffix(".h5"), 'w')
     dcm2vox(dname, hdf, vres) # Input 3D images
     ply2vox(mpath, hdf, progress, tid) # Ground truth 3D mesh
