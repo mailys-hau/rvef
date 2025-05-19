@@ -38,6 +38,9 @@ def check_if_processed(vdir, oname):
             except KeyError: # We're missing at least a grid
                 vox.close()
                 break
+            if vox["GroundTruth"][f"grid{f:02d}"][()].sum() == 0:
+                vox.close() # Ground truth is innexistant or didn't voxelize properly
+                break
         if vox.id.valid: # Meaning file is still open
             ok_files.append(vname.stem)
             vox.close()
