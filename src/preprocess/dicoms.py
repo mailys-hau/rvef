@@ -17,18 +17,22 @@ from preprocess.utils import safe2np, frame2arr
 
 ### Change this according to your system ###
 Image3DAPIWin32 = None
-Image3DAPIx64 = WindowsPath("Image3dAPI/x64/Image3dAPI.tlb")
+Image3DAPIx64 = WindowsPath("C:/Users/malou/Documents/dev/Image3dAPI/x64/Image3dAPI.tlb")
 ############################################
 
 # Silence a warning I can't do anything about
 filterwarnings("ignore", message="A builtin ctypes object gave a PEP3118 format string that does not match its itemsize, so a best-guess will be made of the data type. Newer versions of python may behave correctly.")
 
+# Patch for files that are not fully annotated
+_PROBLEMATIC_CHILDS = { "104001": 19, "110001": 26, "470001": 18, "730001": 25, "920001": 31 }
+
 
 
 def get_frames(src, hdf, bbox, max_vshape, fname):
     nbf = src.GetFrameCount() # Number of frames
-    if fname.parent.stem == "104001":
-        nbf = 19 # Patch because that file isn't fully annotated
+    if fname.parent.stem in _PROBLEMATIC_CHILDS.keys():
+        nbf = _PROBLEMATIC_CHILDS[fname.parent.stem]
+        #nbf = 19 # Patch because that file isn't fully annotated
     try:
         # API returns unsigned int
         lut = np.array(src.GetColorMap(), dtype=np.uint).astype(np.uint8)
