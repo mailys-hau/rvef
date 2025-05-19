@@ -91,6 +91,6 @@ def ply2vox(plydir, hdf, progress, tid):
         with open(fname, "br") as fd: # Need to be opened in binary mode for Trimesh
             dict_mesh = full_load_ply(fd, prefer_color="face")
         mesh = tm.Trimesh(**dict_mesh)
-        grid = np.zeros(hdf["VolumeInfo"]["shape"][()], dtype=bool) #mesh2vox(hdf, mesh)
+        grid = mesh2vox(hdf, mesh)
         group.create_dataset(f"grid{i:02d}", data=grid)
         progress[tid] = { "progress": i + 1, "total": nbf }
